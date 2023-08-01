@@ -11,3 +11,5 @@ yarn
 ```
 yarn start
 ```
+
+https://matching-pairs-game.netlify.app/
