@@ -16,7 +16,11 @@ export function TableView(): JSX.Element {
         <>
             <div className="grid-container">
                 {cards.map((img, index) => (
-                    <CardView key={index} img={img} isRemoved={false} />
+                    <CardView
+                        key={index}
+                        img={img}
+                        isShown={Math.random() > 0.5}
+                    />
                 ))}
             </div>
             {testH1}

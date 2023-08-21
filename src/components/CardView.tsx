@@ -2,9 +2,9 @@ import "./CardView.css";
 
 interface CardProp {
     img: string;
-    isRemoved: boolean;
+    isShown: boolean;
 }
 
-export const CardView = (props: CardProp): JSX.Element => {
-    return <div className="card">{props.img}</div>;
+export const CardView = ({ img, isShown }: CardProp): JSX.Element => {
+    return <div className="card">{isShown ? img : "?"}</div>;
 };
