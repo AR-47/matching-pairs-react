@@ -1,4 +1,17 @@
+body {
+    margin: 0 auto;
+    height: 100vh;
+    /* This grid is used only to centre 
+    the contents of the page on both axes */
+    display: grid;
+    place-items: center;
+}
+
 .grid-container {
     display: grid;
+    text-align: center;
     grid-template-areas: "a a a a";
+    gap: 5px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
 }
