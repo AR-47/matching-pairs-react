@@ -10,8 +10,6 @@ export function TableView(): JSX.Element {
         );
     const cards = createCards(emojiList);
 
-    const testH1 = <h1>He123llo</h1>;
-
     return (
         <>
             <div className="grid-container">
@@ -23,7 +21,6 @@ export function TableView(): JSX.Element {
                     />
                 ))}
             </div>
-            {testH1}
         </>
     );
 }
