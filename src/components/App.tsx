@@ -1,13 +1,10 @@
-import { MyComponent } from "./MyComponent";
+import { TableView } from "./TableView";
 import "./App.css";
-import { greet } from "../greet";
 
 function App() {
     return (
         <div className="App">
-            <MyComponent />
-
-            {greet("World")}
+            <TableView />
         </div>
     );
 }
