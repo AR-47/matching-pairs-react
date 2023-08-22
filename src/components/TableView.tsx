@@ -1,46 +1,55 @@
 import { useState } from "react";
-import { createCards } from "../util/createCards";
+import { CardObj, generateGameCards } from "../util/createCards";
 import { CardView } from "./CardView";
 import "./TableView.css";
 
 export function TableView(): JSX.Element {
-    type Emoji = string;
-    const emojiList: Emoji[] =
+    const emojiList: string[] =
         "🐵 🦧 🐶 🐕 🐩 🐺 🦊 🐱 🐈 🐈‍⬛ 🦁 🐯 🐅 🐆 🐴 🐎 🦄 🦓 🦌 🦬 🐮 🐄 🐷 🐖 🐗 🐽 🐏 🐑 🐐 🐪 🦙 🦒 🐘 🦣 🦏 🦛 🐭 🐀 🐹 🐰 🐇 🐿️ 🦫 🦔 🦇 🐻 🐨 🐼 🦥 🦘 🦡 🦃 🐔 🐤 🐥 🐧 🕊️ 🦅 🦆 🦢 🦉 🦩 🦚 🦜 🐸 🐊 🐢 🦎 🐍 🐲 🦕 🦖 🐳 🐬 🦭 🐠 🐡 🦈 🐙 🐚 🐌 🦋 🐛 🐜 🐝 🐞 🦗 🕷️ 🦂 🦞 🦐 🦑 ⛄".split(
             " "
         );
-    const cards = createCards(emojiList);
+    const gameCards: CardObj[] = generateGameCards(emojiList);
 
-    type turnPhaseType = "noneTurned" | "oneTurned" | "twoTurned";
+    type TurnPhase =
+        | { phase: "noneTurned" }
+        | { phase: "oneTurned"; cardOneId: string }
+        | { phase: "twoTurned"; cardOneId: string; cardTwoId: string };
 
-    const [turnPhase, _setTurnPhase] = useState<turnPhaseType>("noneTurned");
+    const [turnPhase, setTurnPhase] = useState<TurnPhase>({
+        phase: "noneTurned",
+    });
     const [totalClicks, setTotalClicks] = useState<number>(0);
-    // const [flippedCards, setFlippedCards] = useState<number[]>([])
 
-    const allCards = cards.map((img, index) => (
+    const allCardViews = gameCards.map((card: CardObj) => (
         <CardView
-            key={index}
-            img={img}
+            key={card.id}
+            img={card.emoji}
             isShown={Math.random() > 0.5}
-            onCardClick={handleClick}
+            onCardClick={() => handleClick(card.id)}
         />
     ));
-    // const flippedCards = allCards.filter((card) => card.props.isShown === true);
     // const flipCard = () => setIsCardShown((prev) => !prev);
 
-    function handleClick() {
-        switch (turnPhase) {
+    function handleClick(cardId: string) {
+        switch (turnPhase.phase) {
             case "noneTurned":
                 // flip card
-
+                setTurnPhase({ phase: "oneTurned", cardOneId: cardId });
                 setTotalClicks((prev) => prev + 1);
                 break;
             case "oneTurned":
                 // flip card
                 setTotalClicks((prev) => prev + 1);
+                console.log(turnPhase.cardOneId);
                 break;
             case "twoTurned":
-                // unflip both flipped cards
+                alert(
+                    "Are the gameCards a match?" +
+                        turnPhase.cardOneId +
+                        turnPhase.cardTwoId
+                );
+
+                // unflip both flipped gameCards
                 break;
             default:
                 break;
@@ -51,8 +60,8 @@ export function TableView(): JSX.Element {
     return (
         <>
             <div className="game-table">
-                <div className="grid-container">{allCards}</div>
-                <p>{`Turn Status: ${turnPhase}`}</p>
+                <div className="grid-container">{allCardViews}</div>
+                <p>{`Turn Status: ${turnPhase.phase}`}</p>
                 <p>{`Click count: ${totalClicks}`}</p>
             </div>
         </>
