@@ -1,14 +1,25 @@
 import { shuffleArray } from "./shuffleArray";
 
-export const createCards = (cardList: string[]): string[] => {
-    const chosenCardsSet = new Set<string>();
-    while (chosenCardsSet.size !== 8) {
-        const randomIdx = Math.floor(Math.random() * cardList.length);
-        chosenCardsSet.add(cardList[randomIdx]);
+export interface CardObj {
+    id: string;
+    emoji: string;
+}
+
+export const generateGameCards = (emojiList: string[]): CardObj[] => {
+    const chosenEmojiSet = new Set<string>();
+    while (chosenEmojiSet.size !== 8) {
+        const randomIdx = Math.floor(Math.random() * emojiList.length);
+        chosenEmojiSet.add(emojiList[randomIdx]);
     }
-    const chosenCardsList = shuffleArray([
-        ...chosenCardsSet,
-        ...chosenCardsSet,
+    const chosenEmojiList = shuffleArray([
+        ...chosenEmojiSet,
+        ...chosenEmojiSet,
     ]);
-    return chosenCardsList;
+
+    const gameCards: CardObj[] = chosenEmojiList.map((emoji, index) => ({
+        id: index.toString(),
+        emoji: emoji,
+    }));
+
+    return gameCards;
 };
