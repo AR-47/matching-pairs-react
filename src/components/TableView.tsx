@@ -23,8 +23,7 @@ export function TableView(): JSX.Element {
     const allCardViews = gameCards.map((card: CardObj) => (
         <CardView
             key={card.id}
-            img={card.emoji}
-            isShown={Math.random() > 0.5}
+            card={card}
             onCardClick={() => handleClick(card.id)}
         />
     ));
