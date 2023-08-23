@@ -1,8 +1,6 @@
 body {
     margin: 0 auto;
     height: 100vh;
-    /* This grid is used only to centre 
-    the contents of the page on both axes */
     display: grid;
     place-items: center;
 }
@@ -22,4 +20,5 @@ body {
     border: 10px solid #0d4b0f;
     border-radius: 10px;
     padding: 5px;
+    height: 70vh;
 }

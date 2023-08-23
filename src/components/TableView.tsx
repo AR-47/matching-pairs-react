@@ -49,12 +49,6 @@ export function TableView(): JSX.Element {
                 console.log("IDs of flipped card: ", turnPhase.cardOneId);
                 break;
             case "twoTurned": {
-                // alert(
-                //     "Are the gameCards a match?" +
-                //         turnPhase.cardOneId +
-                //         turnPhase.cardTwoId
-                // );
-                // unflip both flipped gameCards if unmatched else remove from table
                 const cardOne = gameCards.filter(
                     (card) => card.id === turnPhase.cardOneId
                 )[0];
