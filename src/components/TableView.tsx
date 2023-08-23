@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CardObj, generateGameCards } from "../util/createCards";
+import { CardObj, generateGameCards } from "../util/generateGameCards";
 import { CardView } from "./CardView";
 import "./TableView.css";
 
