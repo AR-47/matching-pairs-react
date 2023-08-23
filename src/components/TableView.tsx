@@ -32,37 +32,19 @@ export function TableView(): JSX.Element {
     function handleClick(card: CardObj) {
         switch (turnPhase.phase) {
             case "noneTurned":
-                console.log(
-                    "isShown prop before flipCard function: ",
-                    card.isShown
-                );
                 flipCard(card);
-                console.log(
-                    "isShown prop after flipCard function: ",
-                    card.isShown
-                );
                 setTurnPhase({ phase: "oneTurned", cardOneId: card.id });
-                console.log("turnPhase before click:", turnPhase);
                 setTotalClicks((prev) => prev + 1);
                 break;
             case "oneTurned":
-                console.log(
-                    "isShown prop before flipCard function: ",
-                    card.isShown
-                );
                 flipCard(card);
-                console.log(
-                    "isShown prop after flipCard function: ",
-                    card.isShown
-                );
                 setTurnPhase({
                     ...turnPhase,
                     phase: "twoTurned",
                     cardTwoId: card.id,
                 });
-                console.log("turnPhase before click:", turnPhase);
-
                 setTotalClicks((prev) => prev + 1);
+                console.log("IDs of flipped card: ", turnPhase.cardOneId);
                 break;
             case "twoTurned":
                 // alert(
@@ -71,10 +53,7 @@ export function TableView(): JSX.Element {
                 //         turnPhase.cardTwoId
                 // );
                 // unflip both flipped gameCards if unmatched else remove from table
-
                 setTurnPhase({ phase: "noneTurned" });
-                console.log("turnPhase before click:", turnPhase);
-
                 break;
             default:
                 break;
