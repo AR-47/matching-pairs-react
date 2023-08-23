@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CardObj, generateGameCards } from "../util/generateGameCards";
 import { CardView } from "./CardView";
 import "./TableView.css";
+import { flipCard } from "../util/flipCard";
 
 const emojiList: string[] =
     "🐵 🦧 🐶 🐕 🐩 🐺 🦊 🐱 🐈 🐈‍⬛ 🦁 🐯 🐅 🐆 🐴 🐎 🦄 🦓 🦌 🦬 🐮 🐄 🐷 🐖 🐗 🐽 🐏 🐑 🐐 🐪 🦙 🦒 🐘 🦣 🦏 🦛 🐭 🐀 🐹 🐰 🐇 🐿️ 🦫 🦔 🦇 🐻 🐨 🐼 🦥 🦘 🦡 🦃 🐔 🐤 🐥 🐧 🕊️ 🦅 🦆 🦢 🦉 🦩 🦚 🦜 🐸 🐊 🐢 🦎 🐍 🐲 🦕 🦖 🐳 🐬 🦭 🐠 🐡 🦈 🐙 🐚 🐌 🦋 🐛 🐜 🐝 🐞 🦗 🕷️ 🦂 🦞 🦐 🦑 ⛄".split(
@@ -24,24 +25,40 @@ export function TableView(): JSX.Element {
         <CardView
             key={card.id}
             card={card}
-            onCardClick={() => handleClick(card.id)}
+            onCardClick={() => handleClick(card)}
         />
     ));
 
-    function handleClick(cardId: string) {
+    function handleClick(card: CardObj) {
         switch (turnPhase.phase) {
             case "noneTurned":
-                // flip card
-                setTurnPhase({ phase: "oneTurned", cardOneId: cardId });
+                console.log(
+                    "isShown prop before flipCard function: ",
+                    card.isShown
+                );
+                flipCard(card);
+                console.log(
+                    "isShown prop after flipCard function: ",
+                    card.isShown
+                );
+                setTurnPhase({ phase: "oneTurned", cardOneId: card.id });
                 console.log("turnPhase before click:", turnPhase);
                 setTotalClicks((prev) => prev + 1);
                 break;
             case "oneTurned":
-                // flip card
+                console.log(
+                    "isShown prop before flipCard function: ",
+                    card.isShown
+                );
+                flipCard(card);
+                console.log(
+                    "isShown prop after flipCard function: ",
+                    card.isShown
+                );
                 setTurnPhase({
                     ...turnPhase,
                     phase: "twoTurned",
-                    cardTwoId: cardId,
+                    cardTwoId: card.id,
                 });
                 console.log("turnPhase before click:", turnPhase);
 
