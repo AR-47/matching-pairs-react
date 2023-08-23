@@ -3,6 +3,8 @@ import { CardObj, generateGameCards } from "../util/generateGameCards";
 import { CardView } from "./CardView";
 import "./TableView.css";
 import { flipCard } from "../util/flipCard";
+import { removeCard } from "../util/removeCard";
+import { areTwoCardsTheSame } from "../util/areTwoCardsTheSame";
 
 const emojiList: string[] =
     "🐵 🦧 🐶 🐕 🐩 🐺 🦊 🐱 🐈 🐈‍⬛ 🦁 🐯 🐅 🐆 🐴 🐎 🦄 🦓 🦌 🦬 🐮 🐄 🐷 🐖 🐗 🐽 🐏 🐑 🐐 🐪 🦙 🦒 🐘 🦣 🦏 🦛 🐭 🐀 🐹 🐰 🐇 🐿️ 🦫 🦔 🦇 🐻 🐨 🐼 🦥 🦘 🦡 🦃 🐔 🐤 🐥 🐧 🕊️ 🦅 🦆 🦢 🦉 🦩 🦚 🦜 🐸 🐊 🐢 🦎 🐍 🐲 🦕 🦖 🐳 🐬 🦭 🐠 🐡 🦈 🐙 🐚 🐌 🦋 🐛 🐜 🐝 🐞 🦗 🕷️ 🦂 🦞 🦐 🦑 ⛄".split(
@@ -46,15 +48,29 @@ export function TableView(): JSX.Element {
                 setTotalClicks((prev) => prev + 1);
                 console.log("IDs of flipped card: ", turnPhase.cardOneId);
                 break;
-            case "twoTurned":
+            case "twoTurned": {
                 // alert(
                 //     "Are the gameCards a match?" +
                 //         turnPhase.cardOneId +
                 //         turnPhase.cardTwoId
                 // );
                 // unflip both flipped gameCards if unmatched else remove from table
+                const cardOne = gameCards.filter(
+                    (card) => card.id === turnPhase.cardOneId
+                )[0];
+                const cardTwo = gameCards.filter(
+                    (card) => card.id === turnPhase.cardTwoId
+                )[0];
+                if (areTwoCardsTheSame(cardOne, cardTwo)) {
+                    removeCard(cardOne);
+                    removeCard(cardTwo);
+                } else {
+                    flipCard(cardOne);
+                    flipCard(cardTwo);
+                }
                 setTurnPhase({ phase: "noneTurned" });
                 break;
+            }
             default:
                 break;
         }

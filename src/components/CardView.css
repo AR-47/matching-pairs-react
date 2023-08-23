@@ -6,3 +6,7 @@
     padding: 10px;
     min-width: 80px;
 }
+
+.found {
+    visibility: hidden;
+}
