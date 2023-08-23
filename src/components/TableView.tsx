@@ -1,21 +1,24 @@
 import { useState } from "react";
-import { CardObj, generateGameCards } from "../util/createCards";
+import { CardObj, generateGameCards } from "../util/generateGameCards";
 import { CardView } from "./CardView";
 import "./TableView.css";
+import { flipCard } from "../util/flipCard";
+import { removeCard } from "../util/removeCard";
+import { areTwoCardsTheSame } from "../util/areTwoCardsTheSame";
+
+const emojiList: string[] =
+    "🐵 🦧 🐶 🐕 🐩 🐺 🦊 🐱 🐈 🐈‍⬛ 🦁 🐯 🐅 🐆 🐴 🐎 🦄 🦓 🦌 🦬 🐮 🐄 🐷 🐖 🐗 🐽 🐏 🐑 🐐 🐪 🦙 🦒 🐘 🦣 🦏 🦛 🐭 🐀 🐹 🐰 🐇 🐿️ 🦫 🦔 🦇 🐻 🐨 🐼 🦥 🦘 🦡 🦃 🐔 🐤 🐥 🐧 🕊️ 🦅 🦆 🦢 🦉 🦩 🦚 🦜 🐸 🐊 🐢 🦎 🐍 🐲 🦕 🦖 🐳 🐬 🦭 🐠 🐡 🦈 🐙 🐚 🐌 🦋 🐛 🐜 🐝 🐞 🦗 🕷️ 🦂 🦞 🦐 🦑 ⛄".split(
+        " "
+    );
+const gameCards: CardObj[] = generateGameCards(emojiList);
 
 export function TableView(): JSX.Element {
-    const emojiList: string[] =
-        "🐵 🦧 🐶 🐕 🐩 🐺 🦊 🐱 🐈 🐈‍⬛ 🦁 🐯 🐅 🐆 🐴 🐎 🦄 🦓 🦌 🦬 🐮 🐄 🐷 🐖 🐗 🐽 🐏 🐑 🐐 🐪 🦙 🦒 🐘 🦣 🦏 🦛 🐭 🐀 🐹 🐰 🐇 🐿️ 🦫 🦔 🦇 🐻 🐨 🐼 🦥 🦘 🦡 🦃 🐔 🐤 🐥 🐧 🕊️ 🦅 🦆 🦢 🦉 🦩 🦚 🦜 🐸 🐊 🐢 🦎 🐍 🐲 🦕 🦖 🐳 🐬 🦭 🐠 🐡 🦈 🐙 🐚 🐌 🦋 🐛 🐜 🐝 🐞 🦗 🕷️ 🦂 🦞 🦐 🦑 ⛄".split(
-            " "
-        );
-    const gameCards: CardObj[] = generateGameCards(emojiList);
-
-    type TurnPhase =
+    type TurnPhaseType =
         | { phase: "noneTurned" }
         | { phase: "oneTurned"; cardOneId: string }
         | { phase: "twoTurned"; cardOneId: string; cardTwoId: string };
 
-    const [turnPhase, setTurnPhase] = useState<TurnPhase>({
+    const [turnPhase, setTurnPhase] = useState<TurnPhaseType>({
         phase: "noneTurned",
     });
     const [totalClicks, setTotalClicks] = useState<number>(0);
@@ -23,37 +26,53 @@ export function TableView(): JSX.Element {
     const allCardViews = gameCards.map((card: CardObj) => (
         <CardView
             key={card.id}
-            img={card.emoji}
-            isShown={Math.random() > 0.5}
-            onCardClick={() => handleClick(card.id)}
+            card={card}
+            onCardClick={() => handleClick(card)}
         />
     ));
-    // const flipCard = () => setIsCardShown((prev) => !prev);
 
-    function handleClick(cardId: string) {
+    function handleClick(card: CardObj) {
         switch (turnPhase.phase) {
             case "noneTurned":
-                // flip card
-                setTurnPhase({ phase: "oneTurned", cardOneId: cardId });
+                flipCard(card);
+                setTurnPhase({ phase: "oneTurned", cardOneId: card.id });
                 setTotalClicks((prev) => prev + 1);
                 break;
             case "oneTurned":
-                // flip card
+                flipCard(card);
+                setTurnPhase({
+                    ...turnPhase,
+                    phase: "twoTurned",
+                    cardTwoId: card.id,
+                });
                 setTotalClicks((prev) => prev + 1);
-                console.log(turnPhase.cardOneId);
+                console.log("IDs of flipped card: ", turnPhase.cardOneId);
                 break;
-            case "twoTurned":
-                alert(
-                    "Are the gameCards a match?" +
-                        turnPhase.cardOneId +
-                        turnPhase.cardTwoId
-                );
-
-                // unflip both flipped gameCards
+            case "twoTurned": {
+                // alert(
+                //     "Are the gameCards a match?" +
+                //         turnPhase.cardOneId +
+                //         turnPhase.cardTwoId
+                // );
+                // unflip both flipped gameCards if unmatched else remove from table
+                const cardOne = gameCards.filter(
+                    (card) => card.id === turnPhase.cardOneId
+                )[0];
+                const cardTwo = gameCards.filter(
+                    (card) => card.id === turnPhase.cardTwoId
+                )[0];
+                if (areTwoCardsTheSame(cardOne, cardTwo)) {
+                    removeCard(cardOne);
+                    removeCard(cardTwo);
+                } else {
+                    flipCard(cardOne);
+                    flipCard(cardTwo);
+                }
+                setTurnPhase({ phase: "noneTurned" });
                 break;
+            }
             default:
                 break;
-            // update turnPhase
         }
     }
 

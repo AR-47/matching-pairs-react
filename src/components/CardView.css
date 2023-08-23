@@ -4,4 +4,9 @@
     border: 8px solid rgb(99, 163, 224);
     border-radius: 7px;
     padding: 10px;
+    min-width: 80px;
+}
+
+.found {
+    visibility: hidden;
 }
