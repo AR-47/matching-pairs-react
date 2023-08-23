@@ -21,7 +21,7 @@ export const generateGameCards = (emojiList: string[]): CardObj[] => {
     const gameCards: CardObj[] = chosenEmojiList.map((emoji, index) => ({
         id: index.toString(),
         emoji: emoji,
-        isShown: Math.random() > 0.5,
+        isShown: false,
         isFound: false,
     }));
 
