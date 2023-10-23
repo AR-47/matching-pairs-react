@@ -39,14 +39,17 @@ export function TableView(): JSX.Element {
                 setTotalClicks((prev) => prev + 1);
                 break;
             case "oneTurned":
-                flipCard(card);
-                setTurnPhase({
-                    ...turnPhase,
-                    phase: "twoTurned",
-                    cardTwoId: card.id,
-                });
-                setTotalClicks((prev) => prev + 1);
-                console.log("IDs of flipped card: ", turnPhase.cardOneId);
+                if (card.id !== turnPhase.cardOneId) {
+                    flipCard(card);
+                    setTurnPhase({
+                        ...turnPhase,
+                        phase: "twoTurned",
+                        cardTwoId: card.id,
+                    });
+                    setTotalClicks((prev) => prev + 1);
+                } else {
+                    alert("You cannot select the same card again");
+                }
                 break;
             case "twoTurned": {
                 const cardOne = gameCards.filter(
@@ -71,12 +74,10 @@ export function TableView(): JSX.Element {
     }
 
     return (
-        <>
-            <div className="game-table">
-                <div className="grid-container">{allCardViews}</div>
-                <p>{`Turn Status: ${turnPhase.phase}`}</p>
-                <p>{`Click count: ${totalClicks}`}</p>
-            </div>
-        </>
+        <div className="game-table">
+            <div className="grid-container">{allCardViews}</div>
+            <p>{`Turn Status: ${turnPhase.phase}`}</p>
+            <p>{`Click count: ${totalClicks}`}</p>
+        </div>
     );
 }
