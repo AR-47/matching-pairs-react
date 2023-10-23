@@ -32,44 +32,46 @@ export function TableView(): JSX.Element {
     ));
 
     function handleClick(card: CardObj) {
-        switch (turnPhase.phase) {
-            case "noneTurned":
-                flipCard(card);
-                setTurnPhase({ phase: "oneTurned", cardOneId: card.id });
-                setTotalClicks((prev) => prev + 1);
-                break;
-            case "oneTurned":
-                if (card.id !== turnPhase.cardOneId) {
+        if (card.isFound === false) {
+            switch (turnPhase.phase) {
+                case "noneTurned":
                     flipCard(card);
-                    setTurnPhase({
-                        ...turnPhase,
-                        phase: "twoTurned",
-                        cardTwoId: card.id,
-                    });
+                    setTurnPhase({ phase: "oneTurned", cardOneId: card.id });
                     setTotalClicks((prev) => prev + 1);
-                } else {
-                    alert("You cannot select the same card again");
+                    break;
+                case "oneTurned":
+                    if (card.id !== turnPhase.cardOneId) {
+                        flipCard(card);
+                        setTurnPhase({
+                            ...turnPhase,
+                            phase: "twoTurned",
+                            cardTwoId: card.id,
+                        });
+                        setTotalClicks((prev) => prev + 1);
+                    } else {
+                        alert("You cannot select the same card again");
+                    }
+                    break;
+                case "twoTurned": {
+                    const cardOne = gameCards.filter(
+                        (card) => card.id === turnPhase.cardOneId
+                    )[0];
+                    const cardTwo = gameCards.filter(
+                        (card) => card.id === turnPhase.cardTwoId
+                    )[0];
+                    if (areTwoCardsTheSame(cardOne, cardTwo)) {
+                        removeCard(cardOne);
+                        removeCard(cardTwo);
+                    } else {
+                        flipCard(cardOne);
+                        flipCard(cardTwo);
+                    }
+                    setTurnPhase({ phase: "noneTurned" });
+                    break;
                 }
-                break;
-            case "twoTurned": {
-                const cardOne = gameCards.filter(
-                    (card) => card.id === turnPhase.cardOneId
-                )[0];
-                const cardTwo = gameCards.filter(
-                    (card) => card.id === turnPhase.cardTwoId
-                )[0];
-                if (areTwoCardsTheSame(cardOne, cardTwo)) {
-                    removeCard(cardOne);
-                    removeCard(cardTwo);
-                } else {
-                    flipCard(cardOne);
-                    flipCard(cardTwo);
-                }
-                setTurnPhase({ phase: "noneTurned" });
-                break;
+                default:
+                    break;
             }
-            default:
-                break;
         }
     }
 
