@@ -1,11 +1,11 @@
 .card {
-    font-size: 4rem;
+    font-size: 2rem;
+    text-align: center;
     background-color: beige;
     border: 8px solid rgb(99, 163, 224);
     border-radius: 7px;
-    padding: 10px;
-    min-width: 80px;
     opacity: 1;
+    padding: 20px 30px;
     transition: opacity 0.5s ease-in-out;
 }
 
