@@ -27,7 +27,7 @@ export const CardView = ({ card, onCardClick }: CardViewProps): JSX.Element => {
             onClick={onCardClick}
             className={isCardFound ? "card found" : "card"}
         >
-            {isCardShown ? card.emoji : "?"}
+            <p>{isCardShown ? card.emoji : "?"}</p>
         </div>
     );
 };
